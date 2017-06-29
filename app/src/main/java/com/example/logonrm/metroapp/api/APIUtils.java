@@ -12,7 +12,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
  */
 
 public class APIUtils {
-    public static final String BASE_URL = "http://10.3.1.28:3000";
+    public static final String BASE_URL = "http://10.3.1.17:3000";
     private static URL URL_BASE;
 
 

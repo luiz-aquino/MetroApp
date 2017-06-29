@@ -1,16 +1,20 @@
 package com.example.logonrm.metroapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.example.logonrm.metroapp.adapters.LinhaAdapter;
 import com.example.logonrm.metroapp.api.APIUtils;
 import com.example.logonrm.metroapp.api.IMetroAPI;
 import com.example.logonrm.metroapp.models.Linha;
+import com.example.logonrm.metroapp.models.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +36,14 @@ public class LinhasActivity extends AppCompatActivity {
 
         rvLinhas = (RecyclerView) findViewById(R.id.rvLinhas);
 
-        linhaAdapter = new LinhaAdapter(new ArrayList<Linha>());
+        linhaAdapter = new LinhaAdapter(new ArrayList<Linha>(), new OnItemClickListener() {
+            @Override
+            public void onItemClick(Linha linha) {
+                Intent telaMapa = new Intent(LinhasActivity.this, MapsActivity.class);
+                telaMapa.putExtra("LINHA", linha);
+                startActivity(telaMapa);
+            }
+        });
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvLinhas.setLayoutManager(layoutManager);

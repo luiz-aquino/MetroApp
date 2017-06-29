@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.logonrm.metroapp.R;
 import com.example.logonrm.metroapp.api.APIUtils;
 import com.example.logonrm.metroapp.models.Linha;
+import com.example.logonrm.metroapp.models.OnItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,11 +24,13 @@ import java.util.List;
 public class LinhaAdapter extends RecyclerView.Adapter<LinhaAdapter.LinhaViewHolder> {
 
     private List<Linha> linhas;
-    public LinhaAdapter(List<Linha> linhas){
+    private OnItemClickListener listener;
+    public LinhaAdapter(List<Linha> linhas, OnItemClickListener listener){
         this.linhas = linhas;
+        this.listener = listener;
     }
 
-    public class LinhaViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
+    public class LinhaViewHolder extends  RecyclerView.ViewHolder {
         public ImageView ivLinha;
         public TextView tvNumero;
         public TextView tvCor;
@@ -37,14 +40,6 @@ public class LinhaAdapter extends RecyclerView.Adapter<LinhaAdapter.LinhaViewHol
             ivLinha = (ImageView) itemView.findViewById(R.id.iv_linha);
             tvNumero = (TextView) itemView.findViewById(R.id.tv_numero_linha);
             tvCor = (TextView) itemView.findViewById(R.id.tv_cor_linha);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            String value = tvNumero.getText().toString();
-            Toast.makeText(v.getContext(), value, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -58,10 +53,17 @@ public class LinhaAdapter extends RecyclerView.Adapter<LinhaAdapter.LinhaViewHol
     }
 
     @Override
-    public void onBindViewHolder(LinhaViewHolder holder, int position) {
+    public void onBindViewHolder(LinhaViewHolder holder, final int position) {
         Linha linha = linhas.get(position);
         holder.tvNumero.setText( String.valueOf(linha.getNumero()));
         holder.tvCor.setText(linha.getCor());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(linhas.get(position));
+            }
+        });
 
         Picasso.with(holder.itemView.getContext())
                 .load(APIUtils.getResourceFullUrl(linha.getUrlImagem()))
